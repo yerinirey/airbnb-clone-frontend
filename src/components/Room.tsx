@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Grid,
   HStack,
   Image,
@@ -10,7 +11,23 @@ import {
 } from "@chakra-ui/react";
 import { FaRegHeart, FaStar } from "react-icons/fa6";
 
-export default function Room() {
+interface IRoomProps {
+  imageUrl: string;
+  name: string;
+  rating: number;
+  city: string;
+  country: string;
+  price: number;
+}
+
+export default function Room({
+  imageUrl,
+  name,
+  rating,
+  city,
+  country,
+  price,
+}: IRoomProps) {
   const gray = useColorModeValue("gray.600", "gray.300");
   return (
     <VStack alignItems={"flex-start"}>
@@ -21,12 +38,7 @@ export default function Room() {
         rounded={"3xl"}
         w="100%"
       >
-        <Image
-          h="280px"
-          w="100%"
-          objectFit={"cover"}
-          src="https://a0.muscache.com/im/pictures/c32d0baa-29be-4313-8448-ff6a95fa59b7.jpg?im_w=720"
-        />
+        <Image h="280px" w="100%" objectFit={"cover"} src={imageUrl} />
         <Button
           variant={"unstyled"}
           position="absolute"
@@ -40,19 +52,19 @@ export default function Room() {
       <Box>
         <Grid gap={2} templateColumns={"6fr 1fr"}>
           <Text as="b" noOfLines={1} fontSize="md">
-            Doña Remedios Trinidad,필리핀의 저택 전체
+            {name}
           </Text>
           <HStack spacing={1} alignItems={"center"}>
             <FaStar size={14} />
-            <Text>5.0</Text>
+            <Text>{rating}</Text>
           </HStack>
         </Grid>
       </Box>
       <Text fontSize={"sm"} color={gray}>
-        Seoul, S. Korea
+        {city}, {country}
       </Text>
       <Text fontSize={"sm"} color={gray}>
-        <Text as="b">$72 / night</Text>
+        <Text as="b">${price} / night</Text>
       </Text>
     </VStack>
   );
