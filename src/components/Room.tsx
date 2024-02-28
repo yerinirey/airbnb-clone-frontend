@@ -10,6 +10,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FaRegHeart, FaStar } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 interface IRoomProps {
   imageUrl: string;
@@ -18,6 +19,7 @@ interface IRoomProps {
   city: string;
   country: string;
   price: number;
+  pk: number;
 }
 
 export default function Room({
@@ -27,45 +29,48 @@ export default function Room({
   city,
   country,
   price,
+  pk,
 }: IRoomProps) {
   const gray = useColorModeValue("gray.600", "gray.300");
   return (
-    <VStack alignItems={"flex-start"}>
-      <Box
-        position="relative"
-        overflow="hidden"
-        mb="3"
-        rounded={"3xl"}
-        w="100%"
-      >
-        <Image h="280px" w="100%" objectFit={"cover"} src={imageUrl} />
-        <Button
-          variant={"unstyled"}
-          position="absolute"
-          top={0}
-          right={0}
-          color="white"
+    <Link to={`/rooms/${pk}`}>
+      <VStack alignItems={"flex-start"}>
+        <Box
+          position="relative"
+          overflow="hidden"
+          mb="3"
+          rounded={"3xl"}
+          w="100%"
         >
-          <FaRegHeart size="20px" />
-        </Button>
-      </Box>
-      <Box>
-        <Grid gap={2} templateColumns={"6fr 1fr"}>
-          <Text as="b" noOfLines={1} fontSize="md">
-            {name}
-          </Text>
-          <HStack spacing={1} alignItems={"center"}>
-            <FaStar size={14} />
-            <Text>{rating}</Text>
-          </HStack>
-        </Grid>
-      </Box>
-      <Text fontSize={"sm"} color={gray}>
-        {city}, {country}
-      </Text>
-      <Text fontSize={"sm"} color={gray}>
-        <Text as="b">${price} / night</Text>
-      </Text>
-    </VStack>
+          <Image h="280px" w="100%" objectFit={"cover"} src={imageUrl} />
+          <Button
+            variant={"unstyled"}
+            position="absolute"
+            top={0}
+            right={0}
+            color="white"
+          >
+            <FaRegHeart size="20px" />
+          </Button>
+        </Box>
+        <Box>
+          <Grid gap={2} templateColumns={"6fr 1fr"}>
+            <Text as="b" noOfLines={1} fontSize="md">
+              {name}
+            </Text>
+            <HStack spacing={1} alignItems={"center"}>
+              <FaStar size={14} />
+              <Text>{rating}</Text>
+            </HStack>
+          </Grid>
+        </Box>
+        <Text fontSize={"sm"} color={gray}>
+          {city}, {country}
+        </Text>
+        <Text fontSize={"sm"} color={gray}>
+          <Text as="b">${price} / night</Text>
+        </Text>
+      </VStack>
+    </Link>
   );
 }
