@@ -15,12 +15,12 @@ import {
 import { FaEnvelope, FaLock, FaUser, FaUserTag } from "react-icons/fa6";
 import SocialLogin from "./SocialLogin";
 
-interface SignUpModal {
+interface SignUpModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function SignUpModal({ isOpen, onClose }: SignUpModal) {
+export default function SignUpModal({ isOpen, onClose }: SignUpModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />

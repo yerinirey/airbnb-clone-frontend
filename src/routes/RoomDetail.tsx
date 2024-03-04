@@ -15,7 +15,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { FaS, FaStar } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa6";
 
 export default function RoomDetail() {
   const { roomPk } = useParams();
@@ -45,8 +45,8 @@ export default function RoomDetail() {
       >
         {[0, 1, 2, 3, 4].map((idx) => (
           <GridItem
-            colSpan={idx == 0 ? 2 : 1}
-            rowSpan={idx == 0 ? 2 : 1}
+            colSpan={idx === 0 ? 2 : 1}
+            rowSpan={idx === 0 ? 2 : 1}
             overflow={"hidden"}
             key={idx}
           >
@@ -71,11 +71,11 @@ export default function RoomDetail() {
           <Skeleton isLoaded={!isLoading} height={"30px"}>
             <HStack justifyContent={"flex-start"} w="100%">
               <Text>
-                {data?.toilets} toilet{data?.toilets == 1 ? "" : "s"}
+                {data?.toilets} toilet{data?.toilets === 1 ? "" : "s"}
               </Text>
               <Text>·</Text>
               <Text>
-                {data?.rooms} room{data?.rooms == 1 ? "" : "s"}
+                {data?.rooms} room{data?.rooms === 1 ? "" : "s"}
               </Text>
             </HStack>
           </Skeleton>
@@ -91,7 +91,7 @@ export default function RoomDetail() {
               <Text>·</Text>
               <Text>
                 {reviewsData?.length} review
-                {reviewsData?.length == 1 ? "" : "s"}
+                {reviewsData?.length === 1 ? "" : "s"}
               </Text>
             </HStack>
           </Heading>
