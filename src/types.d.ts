@@ -1,3 +1,5 @@
+import { NumericKeys } from "react-hook-form/dist/types/path/common";
+
 export interface IRoomPhotoPhoto {
   pk: string;
   file: string;
@@ -22,8 +24,15 @@ export interface IRoomOwner {
 }
 
 export interface IAmenity {
+  pk: number;
   name: string;
   description: string;
+}
+
+export interface ICategory {
+  pk: number;
+  name: string;
+  kind: string;
 }
 
 export interface IRoomDetail extends IRoomList {
@@ -37,10 +46,7 @@ export interface IRoomDetail extends IRoomList {
   kind: string;
   is_owner: boolean;
   is_liked: boolean;
-  category: {
-    name: string;
-    kind: string;
-  };
+  category: ICategory;
   owner: IRoomOwner;
   amenities: IAmenity[];
 }

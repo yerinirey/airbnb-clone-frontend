@@ -44,7 +44,8 @@ export default function Home() {
         <Room
           key={room.pk}
           pk={room.pk}
-          imageUrl={`https://source.unsplash.com/random/450x${450 + idx}`}
+          // imageUrl={`https://source.unsplash.com/random/450x${450 + idx}`}
+          imageUrl={room.photos[0]?.file}
           name={room.name}
           rating={room.rating}
           city={room.city}
