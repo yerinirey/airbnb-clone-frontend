@@ -47,7 +47,7 @@ export const githubLogIn = ({ code }: { code: string }) =>
     )
     .then((response) => response.status);
 
-export const kakaoLogin = (code: string) =>
+export const kakaoLogin = ({ code }: { code: string }) =>
   instance
     .post(
       `/users/kakao`,
