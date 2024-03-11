@@ -34,7 +34,7 @@ export const logOut = () =>
     })
     .then((response) => response.data);
 
-export const githubLogIn = (code: string) =>
+export const githubLogIn = ({ code }: { code: string }) =>
   instance
     .post(
       `/users/github`,
