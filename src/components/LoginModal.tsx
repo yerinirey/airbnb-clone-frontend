@@ -55,6 +55,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
       toast({
         title: "Welcome Back!",
         status: "success",
+        position: "bottom-right",
       });
       onClose();
       queryClient.refetchQueries(["me"]);
@@ -65,7 +66,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     mutation.mutate({ username, password });
   };
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        reset();
+        onClose();
+      }}
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Log in</ModalHeader>
