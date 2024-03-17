@@ -1,6 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { checkBooking, getRoom, getRoomReviews } from "../api";
+import {
+  IRoomBookingVariables,
+  checkBooking,
+  getRoom,
+  getRoomReviews,
+  roomBooking,
+} from "../api";
 import { IReview, IRoomDetail } from "../types";
 import type { Value } from "react-calendar/dist/cjs/shared/types";
 import Calendar from "react-calendar";
@@ -16,13 +22,19 @@ import {
   HStack,
   Heading,
   Image,
+  Input,
+  InputGroup,
+  InputLeftAddon,
   Skeleton,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
-import { FaPenToSquare, FaStar } from "react-icons/fa6";
+import { FaPenToSquare, FaStar, FaUser } from "react-icons/fa6";
 import { useState } from "react";
 import { Helmet } from "react-helmet";
+import { useForm } from "react-hook-form";
+import { formatDate } from "../lib/utils";
 
 export default function RoomDetail() {
   const { roomPk } = useParams();
@@ -32,19 +44,41 @@ export default function RoomDetail() {
     IReview[]
   >([`rooms`, roomPk, `reviews`], getRoomReviews);
   const [dates, setDates] = useState<Value>();
-  const {
-    data: checkBookingData,
-    isLoading: isCheckingBooking,
-    refetch,
-  } = useQuery(["check", roomPk, dates], checkBooking, {
-    enabled: dates !== undefined,
-    cacheTime: 0,
-  });
-
+  const { data: checkBookingData, isLoading: isCheckingBooking } = useQuery(
+    ["check", roomPk, dates],
+    checkBooking,
+    {
+      enabled: dates !== undefined,
+      cacheTime: 0,
+    }
+  );
   const onEditClick = () => {
     navigate(`/rooms/${roomPk}/edit`);
   };
+  const { register, handleSubmit } = useForm<IRoomBookingVariables>();
+  const toast = useToast();
+  const mutation = useMutation(roomBooking, {
+    onSuccess: (data) => {
+      toast({
+        status: "success",
+        position: "bottom-right",
+        title: "Booking successed",
+        description: `${data.check_in} ~ ${data.check_out}`,
+      });
+    },
+  });
 
+  const onBooking = (data: IRoomBookingVariables) => {
+    if (dates && roomPk && Array.isArray(dates) && dates.length === 2) {
+      const [firstDate, secondDate] = dates;
+      const checkIn = formatDate(firstDate!);
+      const checkOut = formatDate(secondDate!);
+      data.check_in = checkIn;
+      data.check_out = checkOut;
+      data.roomPk = roomPk;
+      mutation.mutate(data);
+    }
+  };
   return (
     <Box
       mt={10}
@@ -196,7 +230,7 @@ export default function RoomDetail() {
           </Box>
         </Box>
         {/* for calendar */}
-        <Box py={10}>
+        <Box py={10} as="form" onSubmit={handleSubmit(onBooking)}>
           <Calendar
             goToRangeStartOnSelect
             onChange={setDates}
@@ -207,12 +241,22 @@ export default function RoomDetail() {
             next2Label={null}
             prev2Label={null}
           />
+          <InputGroup mt={5}>
+            <InputLeftAddon children={<FaUser />} />
+            <Input
+              {...register("guests", { required: true })}
+              type="number"
+              defaultValue={1}
+              min={1}
+            />
+          </InputGroup>
           <Button
             disabled={!checkBookingData?.ok}
             isLoading={isCheckingBooking}
             mt={5}
             w="100%"
             colorScheme="red"
+            type="submit"
           >
             Make Booking
           </Button>

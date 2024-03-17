@@ -61,7 +61,7 @@ export default function Room({
             {isOwner ? <FaCamera size="20px" /> : <FaRegHeart size="20px" />}
           </Button>
         </Box>
-        <Box>
+        <Box w="100%">
           <Grid gap={2} templateColumns={"6fr 1fr"}>
             <Text as="b" noOfLines={1} fontSize="md">
               {name}

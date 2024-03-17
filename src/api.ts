@@ -235,3 +235,18 @@ export const checkBooking = ({
       .then((response) => response.data);
   }
 };
+export interface IRoomBookingVariables {
+  roomPk: string;
+  check_in: string;
+  check_out: string;
+  guests: string;
+}
+
+export const roomBooking = (variables: IRoomBookingVariables) =>
+  instance
+    .post(`rooms/${variables.roomPk}/bookings`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
