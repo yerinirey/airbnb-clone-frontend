@@ -1,8 +1,13 @@
 import Cookie from "js-cookie";
-import { QueryFunctionContext } from "@tanstack/react-query";
+import {
+  MutationFunction,
+  QueryFunctionContext,
+  QueryKey,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { Value } from "react-calendar/dist/cjs/shared/types";
 import { formatDate } from "./lib/utils";
+import { IRoomDetail } from "./types";
 
 const instance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1/",
@@ -132,6 +137,31 @@ export interface IUploadRoomVariables {
 export const uploadRoom = (variables: IUploadRoomVariables) =>
   instance
     .post(`rooms/`, variables, {
+      headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || "",
+      },
+    })
+    .then((response) => response.data);
+
+export interface IEditRoomVariables {
+  roomPk: string;
+  name: string;
+  country: string;
+  city: string;
+  price: number;
+  rooms: number;
+  toilets: number;
+  description: string;
+  address: string;
+  pet_friendly: boolean;
+  kind: string;
+  amenities: number[];
+  category: number;
+}
+
+export const editRoom = (variables: IEditRoomVariables) =>
+  instance
+    .put(`rooms/${variables.roomPk}`, variables, {
       headers: {
         "X-CSRFToken": Cookie.get("csrftoken") || "",
       },

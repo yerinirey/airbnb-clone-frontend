@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { checkBooking, getRoom, getRoomReviews } from "../api";
 import { IReview, IRoomDetail } from "../types";
 import type { Value } from "react-calendar/dist/cjs/shared/types";
@@ -20,12 +20,13 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { FaStar } from "react-icons/fa6";
-import { useEffect, useState } from "react";
+import { FaPenToSquare, FaStar } from "react-icons/fa6";
+import { useState } from "react";
 import { Helmet } from "react-helmet";
 
 export default function RoomDetail() {
   const { roomPk } = useParams();
+  const navigate = useNavigate();
   const { isLoading, data } = useQuery<IRoomDetail>([`rooms`, roomPk], getRoom);
   const { data: reviewsData, isLoading: isReviewsLoading } = useQuery<
     IReview[]
@@ -39,7 +40,11 @@ export default function RoomDetail() {
     enabled: dates !== undefined,
     cacheTime: 0,
   });
-  console.log(checkBookingData, isCheckingBooking);
+
+  const onEditClick = () => {
+    navigate(`/rooms/${roomPk}/edit`);
+  };
+
   return (
     <Box
       mt={10}
@@ -52,7 +57,14 @@ export default function RoomDetail() {
         <title>{data ? data.name : "Loading..."}</title>
       </Helmet>
       <Skeleton height={"43px"} width={"40%"} isLoaded={!isLoading}>
-        <Heading>{data?.name}</Heading>
+        <HStack justifyContent={"flex-start"}>
+          <Heading>{data?.name}</Heading>
+          {data?.is_owner ? (
+            <Button variant={"unstyled"} onClick={onEditClick}>
+              <FaPenToSquare size="30px" color="grey" />
+            </Button>
+          ) : null}
+        </HStack>
       </Skeleton>
       <Grid
         mt={8}
@@ -114,8 +126,9 @@ export default function RoomDetail() {
               src={data?.owner.avatar}
             />
           </HStack>
+          {/* for reviews */}
           <Box mt={10}>
-            <Skeleton width="30%" isLoaded={!isLoading}>
+            <Skeleton width="40%" isLoaded={!isLoading}>
               <Heading
                 display="flex"
                 mb={5}
@@ -182,6 +195,7 @@ export default function RoomDetail() {
             </Container>
           </Box>
         </Box>
+        {/* for calendar */}
         <Box py={10}>
           <Calendar
             goToRangeStartOnSelect

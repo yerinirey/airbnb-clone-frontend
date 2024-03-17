@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import { createPhoto, getUploadURL, uploadImage } from "../api";
 import useHostOnlyPage from "../components/HostOnlyPage";
 import ProtectedPage from "../components/ProtectedPage";
+import useOwnerOnlyPage from "../components/OwnerOnlyPage";
 
 interface IForm {
   file: FileList;
@@ -60,6 +61,7 @@ export default function UploadPhotos() {
     },
   });
   useHostOnlyPage();
+  useOwnerOnlyPage(roomPk!);
   const onSubmit = () => {
     uploadURLMutation.mutate();
   };
